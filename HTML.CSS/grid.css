@@ -1,0 +1,42 @@
+.friends{
+    display: grid;
+    grid-template-columns: 100px 1fr 1fr;
+    grid-template-rows: 100px 100px 100px;
+    gap: 1cm;
+}
+header{
+    grid-column: 1/4;
+    background-color: green;
+    padding: 20px;
+    color: white;
+}
+footer{
+    grid-column: 1/4;
+    background-color: black;
+    padding: 20px;
+    color: white;
+}
+main{
+    grid-column: 1/4;
+    background-color: green;
+    padding: 20px;
+    color: white;
+}
+aside{
+    grid-column: 1/5;
+    padding: 20px;
+    background-color: black;
+    color: white;
+}
+.grid{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 1cm;
+    
+}
+.d1{
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
