@@ -1,0 +1,6 @@
+body{
+   display: center;
+   flex-direction: row-reverse;
+   flex-wrap: wrap;
+   gap: 10cm;
+}
