@@ -101,7 +101,32 @@ else{
 } */
 
 
-function wash(vessels){
+/*function wash(vessels){
 console.log("we have to wash"+vessels+"vessels");
 }
-dishwash(2);
+dishwash(2);*/
+
+
+/*function num(n)
+{
+    if (n>10)
+    {
+return;
+    }
+    console.log(n);
+    n+=1;
+    num(n);
+}
+num(1);*/
+
+
+
+let chocolates=["Melodi","fivestar","dairysilk","kachamango","darkfantasy"]
+let sales={
+    fazil:chocolates[0],
+    mushraf:chocolates[1],
+    padmanadham:chocolates[2],
+    Arshil:chocolates[3],
+    muzammil:chocolates[4]
+};
+console.log(sales);
