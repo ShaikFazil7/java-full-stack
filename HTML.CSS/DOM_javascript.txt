@@ -1,0 +1,10 @@
+let greet= document.getElementById("wish");
+console.log(greet);
+let mouse=document.getElementsByClassName("wishes");
+console.log(mouse);
+let cable=document.getElementsByClassName("div");
+console.log(cable);
+let water=document.getElementsByClassName("#content");
+console.log(water);
+let queries=document.getElementsByClassName("p");
+console.log(queries);

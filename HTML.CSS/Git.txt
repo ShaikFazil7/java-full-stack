@@ -14,3 +14,20 @@ function guess(n) {
 
 let number = Math.floor(Math.random() * 100) + 1;
 guess(number);
+
+
+h1{
+    width: fit-content;
+    height: 10c0px;
+}
+body{
+    background-color: aqua;
+}
+#content{
+    display: flex;
+    gap: 1cm;
+}
+h1{
+    text-align: center;
+    color: darkorchid;
+}
