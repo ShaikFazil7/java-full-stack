@@ -8,3 +8,60 @@ let water=document.getElementsByClassName("#content");
 console.log(water);
 let queries=document.getElementsByClassName("p");
 console.log(queries);
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #chocolate
+        {
+            width: 2cm;
+            height: 2cm;
+            background-color: blueviolet;
+            position:relative; 
+            border-style: double 
+        }
+    </style>
+</head>
+<body>
+    <div id="chocolate">
+   
+    </div>
+    <p> Mouse over the space</p>
+    <script>
+const box=document.getElementById("chocolate");
+let x=100;
+let y=100;
+const step=10;
+document.addEventListener("keydown",function (keys)
+{
+    if (keys.code=="ArrowDown")
+    {
+        y+=step;
+    }
+    if(keys.code=="ArrowUp")
+    {
+        y-=step;
+    }
+    box.style.left=x+"px";
+    box.style.top=y+"px";
+});
+const candy= document.getElementById("chocolate");
+candy.addEventListener("mouseover",function ()
+{
+    candy.style.backgroundColor="orange";
+    candy.innerText="One Punch Man";
+});
+candy.addEventListener("mouseout",function() 
+{
+candy.style.backgroundColor="pink";
+candy.innerText="Naruto";
+});
+    </script>
+</body>
+</html>

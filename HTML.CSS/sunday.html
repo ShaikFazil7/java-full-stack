@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>UNO Power Edition</title>
+
+<style>
+body{
+    font-family:Arial;
+    background:#0f172a;
+    color:white;
+    text-align:center;
+}
+
+#game{
+    max-width:1000px;
+    margin:auto;
+}
+
+.card{
+    width:70px;
+    height:100px;
+    display:inline-flex;
+    justify-content:center;
+    align-items:center;
+    border-radius:10px;
+    margin:5px;
+    cursor:pointer;
+    font-weight:bold;
+    font-size:18px;
+    color:white;
+}
+
+.red{background:#ef4444;}
+.blue{background:#3b82f6;}
+.green{background:#22c55e;}
+.yellow{background:#eab308;color:black;}
+
+#topCard{
+    margin:20px;
+}
+
+button{
+    padding:10px 15px;
+    margin:10px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div id="game">
+
+<h1>UNO POWER EDITION</h1>
+
+<h3 id="turn">Your Turn</h3>
+
+<h3>Opponent Cards: <span id="oppCount">0</span></h3>
+
+<div id="topCard"></div>
+
+<h3>Your Hand</h3>
+<div id="playerHand"></div>
+
+<button onclick="drawRandomCard()">Pick Random Card</button>
+<button onclick="restart()">Restart</button>
+
+<p id="msg"></p>
+
+</div>
+
+<script>
+
+const colors=["red","blue","green","yellow"];
+
+let deck=[];
+let player=[];
+let opponent=[];
+let discard=[];
+
+// ---------------- CREATE DECK ----------------
+function createDeck(){
+    deck=[];
+
+    colors.forEach(c=>{
+        for(let i=0;i<=9;i++){
+            deck.push({color:c,value:i});
+        }
+
+        deck.push({color:c,value:"+2"});
+        deck.push({color:c,value:"+4"});
+        deck.push({color:c,value:"+6"});
+        deck.push({color:c,value:"+10"});
+        deck.push({color:c,value:"Skip"});
+        deck.push({color:c,value:"Reverse"});
+        deck.push({color:c,value:"Random"});
+    });
+
+    shuffle(deck);
+}
+
+// ---------------- SHUFFLE ----------------
+function shuffle(arr){
+    for(let i=arr.length-1;i>0;i--){
+        let j=Math.floor(Math.random()*(i+1));
+        [arr[i],arr[j]]=[arr[j],arr[i]];
+    }
+}
+
+// ---------------- DEAL ----------------
+function deal(){
+    player=[];
+    opponent=[];
+    discard=[];
+
+    for(let i=0;i<7;i++){
+        player.push(deck.pop());
+        opponent.push(deck.pop());
+    }
+
+    discard.push(deck.pop());
+}
+
+// ---------------- CHECK PLAYABLE ----------------
+function playable(card){
+    let top=discard[discard.length-1];
+    return card.color===top.color || card.value===top.value;
+}
+
+// ---------------- RENDER ----------------
+function render(){
+
+    document.getElementById("oppCount").innerText=opponent.length;
+
+    let top=discard[discard.length-1];
+
+    document.getElementById("topCard").innerHTML=
+    `<div class="card ${top.color}">${top.value}</div>`;
+
+    let html="";
+
+    player.forEach((c,i)=>{
+        html+=`<div class="card ${c.color}" onclick="play(${i})">${c.value}</div>`;
+    });
+
+    document.getElementById("playerHand").innerHTML=html;
+}
+
+// ---------------- PLAY CARD ----------------
+function play(i){
+
+    let card=player[i];
+
+    if(!playable(card)){
+        show("Invalid move");
+        return;
+    }
+
+    discard.push(card);
+    player.splice(i,1);
+
+    apply(card,false);
+
+    if(player.length===1) show("🔥 UNO!");
+    if(player.length===0){
+        alert("You Win!");
+        location.reload();
+    }
+
+    render();
+    setTurn("Opponent Turn");
+
+    setTimeout(opponentTurn,800);
+}
+
+// ---------------- APPLY POWER ----------------
+function apply(card,fromOpp){
+
+    let target = fromOpp ? player : opponent;
+
+    if(card.value==="+2") draw(target,3);
+    if(card.value==="+4") draw(target,5);
+    if(card.value==="+6") draw(target,7);
+    if(card.value==="+10") draw(target,11);
+
+    if(card.value==="Skip") return;
+
+    if(card.value==="Reverse"){
+        show("Reverse → Opponent skipped");
+        return;
+    }
+
+    if(card.value==="Random"){
+        steal(fromOpp ? opponent : player,
+              fromOpp ? player : opponent);
+    }
+}
+
+// ---------------- DRAW ----------------
+function draw(target,n){
+    for(let i=0;i<n;i++){
+        if(deck.length===0) break;
+        target.push(deck.pop());
+    }
+}
+
+// ---------------- RANDOM STEAL ----------------
+function steal(a,b){
+    if(b.length===0) return;
+
+    let idx=Math.floor(Math.random()*b.length);
+    a.push(b.splice(idx,1)[0]);
+}
+
+// ---------------- OPPONENT TURN ----------------
+function opponentTurn(){
+
+    let played=false;
+
+    for(let i=0;i<opponent.length;i++){
+        if(playable(opponent[i])){
+
+            let c=opponent[i];
+            opponent.splice(i,1);
+            discard.push(c);
+
+            apply(c,true);
+            show("Opponent played "+c.value);
+
+            played=true;
+            break;
+        }
+    }
+
+    if(!played){
+        if(deck.length>0){
+            let c=deck.pop();
+
+            if(playable(c)){
+                discard.push(c);
+                show("Opponent drew & played "+c.value);
+            }else{
+                opponent.push(c);
+                show("Opponent drew card");
+            }
+        }
+    }
+
+    if(opponent.length===1) show("⚠ Opponent UNO!");
+    if(opponent.length===0){
+        alert("Opponent Wins!");
+        location.reload();
+    }
+
+    render();
+    setTurn("Your Turn");
+}
+
+// ---------------- DRAW RANDOM CARD ----------------
+function drawRandomCard(){
+
+    if(deck.length===0) return;
+
+    let c=deck.pop();
+
+    if(playable(c)){
+        discard.push(c);
+        show("Auto played "+c.value);
+        setTimeout(opponentTurn,800);
+    }else{
+        player.push(c);
+        show("Card added");
+    }
+
+    render();
+}
+
+// ---------------- UI HELPERS ----------------
+function show(m){
+    document.getElementById("msg").innerText=m;
+}
+
+function setTurn(t){
+    document.getElementById("turn").innerText=t;
+}
+
+// ---------------- RESTART ----------------
+function restart(){
+    location.reload();
+}
+
+// ---------------- START GAME ----------------
+createDeck();
+deal();
+render();
+
+</script>
+
+</body>
+</html>

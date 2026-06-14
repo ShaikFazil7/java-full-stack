@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+<body id="body">
+    <h1 id="del">Star</h1>
+    <p id="p1"> Fazil </p>
+    <ul id="list">
+        <li id="Gazi">Ertugrul Gazi</li>
+        <li id="Kurulus"> Kurulus Osman</li>
+        <li id="Orhan">Kurulus Orhan</li>
+    </ul>
+    <script>
+        let p=document.createElement("p");
+        p.innerText="Karayul Osman";
+        console.log(p);
+        document.body.appendChild(p);
+        document.getElementById("del").remove();
+        let rename=document.createElement("p");
+        rename.innerText="Zil";
+        /* Replacement starts from here.if we remove this it can't repace!*/
+        let name=document.getElementById("p1");
+        document.getElementById("body").replaceChild(rename,name);
+        let Ertugrul=document.createElement("li");
+        Ertugrul.innerText="Fazil";
+        let kurulus_Osman=document.getElementById("Kurulus");
+        document.getElementById("list").insertBefore(Ertugrul,kurulus_Osman);
+        let bleach=document.createElement("li");
+        bleach.innerText="Bleach";
+        document.getElementById("Orhan").after(bleach);
+       
+        let Spy=document.createElement("li");
+        Spy.innerText="Halima Sulthana";
+        document.getElementById("Gazi").before(Spy);
+
+    </script>
+</body>
+</html>
